@@ -16,13 +16,17 @@ document.addEventListener("DOMContentLoaded", () => {
   recognition.interimResults = true;
   recognition.lang = "en-US";
 
-  startSTTButton.addEventListener("click", () => {
-    recognition.start();
-  });
+  if (startSTTButton) {
+    startSTTButton.addEventListener("click", () => {
+      recognition.start();
+    });
+  }
 
-  stopSTTButton.addEventListener("click", () => {
-    recognition.stop();
-  });
+  if (stopSTTButton) {
+    stopSTTButton.addEventListener("click", () => {
+      recognition.stop();
+    });
+  }
 
   recognition.addEventListener("result", (event) => {
     let transcript = Array.from(event.results)

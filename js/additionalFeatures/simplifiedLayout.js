@@ -9,14 +9,16 @@
 document.addEventListener("DOMContentLoaded", () => {
   const toggleLayoutButton = document.getElementById("toggleLayoutButton");
 
-  toggleLayoutButton.addEventListener("click", () => {
-    document.body.classList.toggle("simplified-layout");
-    const isSimplified = document.body.classList.contains("simplified-layout");
-    localStorage.setItem(
-      "simplifiedLayout",
-      isSimplified ? "enabled" : "disabled"
-    );
-  });
+  if (toggleLayoutButton) {
+    toggleLayoutButton.addEventListener("click", () => {
+      document.body.classList.toggle("simplified-layout");
+      const isSimplified = document.body.classList.contains("simplified-layout");
+      localStorage.setItem(
+        "simplifiedLayout",
+        isSimplified ? "enabled" : "disabled"
+      );
+    });
+  }
 
   function loadSimplifiedLayout() {
     const layoutStatus = localStorage.getItem("simplifiedLayout");

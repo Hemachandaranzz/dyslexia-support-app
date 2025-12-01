@@ -1,190 +1,138 @@
-// bookUpload.js - Enhanced with Drag & Drop and Animations
+// Global variables
+let pdfDoc = null;
+let pdfPages = [];
+let currentPage = 0;
+let selectedFormat = 'standard';
+let currentFileName = '';
 
-/**
- * Book Upload functionality with drag & drop support.
- * - Allows users to upload books (PDF, EPUB, TXT).
- * - Drag and drop interface with visual feedback
- * - Animated progress indicators
- * - Parses the uploaded file and displays its content in the app.
- */
+// Initialize PDF.js worker
+pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
 
 document.addEventListener("DOMContentLoaded", () => {
-  const bookUploadInput = document.getElementById("bookUpload");
   const uploadZone = document.getElementById("upload-zone");
+  const fileInput = document.getElementById("bookUpload");
 
-  if (bookUploadInput && uploadZone) {
-    // File input change event
-    bookUploadInput.addEventListener("change", handleBookUpload);
+  // Drag and drop handlers
+  uploadZone.addEventListener("dragover", (e) => {
+    e.preventDefault();
+    uploadZone.classList.add("dragover");
+  });
 
-    // Make upload zone clickable
-    uploadZone.addEventListener("click", () => {
-      bookUploadInput.click();
-    });
+  uploadZone.addEventListener("dragleave", () => {
+    uploadZone.classList.remove("dragover");
+  });
 
-    // Drag and drop events
-    uploadZone.addEventListener("dragover", handleDragOver);
-    uploadZone.addEventListener("dragleave", handleDragLeave);
-    uploadZone.addEventListener("drop", handleDrop);
-  }
+  uploadZone.addEventListener("drop", (e) => {
+    e.preventDefault();
+    uploadZone.classList.remove("dragover");
+    const files = e.dataTransfer.files;
+    if (files.length > 0) {
+      handleFileSelection(files[0]);
+    }
+  });
 
-  // Configure PDF.js worker
-  if (typeof pdfjsLib !== 'undefined') {
-    pdfjsLib.GlobalWorkerOptions.workerSrc =
-      'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
-  }
+  // Click to upload
+  uploadZone.addEventListener("click", () => {
+    fileInput.click();
+  });
+
+  fileInput.addEventListener("change", (e) => {
+    if (e.target.files.length > 0) {
+      handleFileSelection(e.target.files[0]);
+    }
+  });
+
+  // Initialize styles for progress bar
+  addProgressStyles();
 });
 
 /**
- * Handle drag over event
- */
-function handleDragOver(e) {
-  e.preventDefault();
-  e.stopPropagation();
-  const uploadZone = document.getElementById("upload-zone");
-  uploadZone.classList.add("dragover");
-}
-
-/**
- * Handle drag leave event
- */
-function handleDragLeave(e) {
-  e.preventDefault();
-  e.stopPropagation();
-  const uploadZone = document.getElementById("upload-zone");
-  uploadZone.classList.remove("dragover");
-}
-
-/**
- * Handle drop event
- */
-function handleDrop(e) {
-  e.preventDefault();
-  e.stopPropagation();
-  const uploadZone = document.getElementById("upload-zone");
-  uploadZone.classList.remove("dragover");
-
-  const files = e.dataTransfer.files;
-  if (files.length > 0) {
-    handleFileSelection(files[0]);
-  }
-}
-
-/**
- * Handles the book upload event by processing the selected file.
- * Supports PDF, EPUB, and TXT file formats.
- */
-function handleBookUpload(event) {
-  const file = event.target.files[0];
-  if (file) {
-    handleFileSelection(file);
-  }
-}
-
-/**
- * Process the selected file
+ * Handle file selection
  */
 function handleFileSelection(file) {
-  const fileType = file.type;
-  const fileName = file.name.toLowerCase();
-  const bookDisplay = document.getElementById("bookDisplay");
   const uploadZone = document.getElementById("upload-zone");
+  const validTypes = ['application/pdf', 'application/epub+zip', 'text/plain'];
 
-  // Add uploading state
+  if (!validTypes.includes(file.type) && !file.name.endsWith('.epub')) {
+    showError('Invalid file type', 'Please upload a PDF, EPUB, or TXT file.');
+    return;
+  }
+
+  currentFileName = file.name;
   uploadZone.classList.add("uploading");
-
-  // Show loading state with animation
-  bookDisplay.innerHTML = `
-    <div style="text-align: center; padding: 3rem;">
-      <div class="upload-animation">
-        <div class="book-icon">📖</div>
-        <div class="loading-dots">
-          <span>.</span><span>.</span><span>.</span>
-        </div>
+  uploadZone.innerHTML = `
+    <div class="upload-progress">
+      <div class="loading-dots">
+        <span></span><span></span><span></span>
       </div>
-      <p style="margin-top: 1.5rem; color: #667eea; font-size: 1.1rem; font-weight: 600;">
-        Loading ${file.name}
-      </p>
-      <div class="upload-progress">
-        <div class="upload-progress-bar">
-          <div class="upload-progress-fill" id="uploadProgressFill"></div>
-        </div>
-        <div class="upload-progress-text">Preparing...</div>
+      <p class="upload-progress-text">Processing ${file.name}...</p>
+      <div class="progress-bar-container">
+        <div class="progress-bar-fill" id="uploadProgressFill"></div>
       </div>
     </div>
   `;
 
-  // Add upload animation styles dynamically
-  addUploadAnimationStyles();
-
-  // Determine file type and parse accordingly
-  setTimeout(() => {
-    if (fileType === "application/pdf" || fileName.endsWith('.pdf')) {
-      parsePDF(file);
-    } else if (fileType === "application/epub+zip" || fileName.endsWith('.epub')) {
-      parseEPUB(file);
-    } else if (fileType.startsWith("text/") || fileName.endsWith('.txt')) {
-      parseTXT(file);
-    } else {
-      uploadZone.classList.remove("uploading");
-      bookDisplay.innerHTML = `
-        <div style="text-align: center; padding: 2rem; color: #f5576c;">
-          <div style="font-size: 3rem; margin-bottom: 1rem;">⚠️</div>
-          <p><strong>Unsupported file format</strong></p>
-          <p>Please upload a PDF, EPUB, or TXT file.</p>
-        </div>
-      `;
-    }
-  }, 300);
+  if (file.type === 'application/pdf') {
+    parsePDF(file);
+  } else if (file.type === 'application/epub+zip' || file.name.endsWith('.epub')) {
+    parseEPUB(file);
+  } else if (file.type === 'text/plain') {
+    parseTXT(file);
+  }
 }
 
 /**
- * Add upload animation styles dynamically
+ * Add progress bar styles dynamically
  */
-function addUploadAnimationStyles() {
-  if (document.getElementById('upload-animation-styles')) return;
-
+function addProgressStyles() {
   const style = document.createElement('style');
-  style.id = 'upload-animation-styles';
   style.textContent = `
-    .upload-animation {
+    .upload-progress {
       display: flex;
       flex-direction: column;
       align-items: center;
-      gap: 1rem;
+      justify-content: center;
+      width: 100%;
     }
-    
-    .book-icon {
-      font-size: 4rem;
-      animation: bookFlip 2s ease-in-out infinite;
+    .progress-bar-container {
+      width: 80%;
+      height: 6px;
+      background: rgba(255,255,255,0.2);
+      border-radius: 10px;
+      margin-top: 15px;
+      overflow: hidden;
     }
-    
-    @keyframes bookFlip {
-      0%, 100% { transform: rotateY(0deg) scale(1); }
-      50% { transform: rotateY(180deg) scale(1.1); }
+    .progress-bar-fill {
+      width: 0%;
+      height: 100%;
+      background: #4facfe;
+      border-radius: 10px;
+      transition: width 0.3s ease;
     }
-    
     .loading-dots {
       display: flex;
-      gap: 0.5rem;
-      font-size: 2rem;
-      color: #667eea;
+      gap: 8px;
+      margin-bottom: 10px;
     }
-    
     .loading-dots span {
-      animation: bounce 1.4s ease-in-out infinite;
+      width: 10px;
+      height: 10px;
+      background: white;
+      border-radius: 50%;
+      animation: bounce 1.4s infinite ease-in-out both;
     }
-    
+    .loading-dots span:nth-child(1) {
+      animation-delay: -0.32s;
+    }
     .loading-dots span:nth-child(2) {
-      animation-delay: 0.2s;
+      animation-delay: -0.16s;
     }
-    
     .loading-dots span:nth-child(3) {
-      animation-delay: 0.4s;
+      animation-delay: 0s;
     }
-    
     @keyframes bounce {
-      0%, 80%, 100% { transform: translateY(0); opacity: 1; }
-      40% { transform: translateY(-20px); opacity: 0.7; }
+      0%, 80%, 100% { transform: scale(0); }
+      40% { transform: scale(1); }
     }
   `;
   document.head.appendChild(style);
@@ -206,11 +154,10 @@ function updateProgress(percent, text) {
 }
 
 /**
- * Parses a PDF file and displays its content.
+ * Parses a PDF file and stores pages separately.
  * @param {File} file - The PDF file to parse.
  */
 async function parsePDF(file) {
-  const bookDisplay = document.getElementById("bookDisplay");
   const uploadZone = document.getElementById("upload-zone");
 
   try {
@@ -226,15 +173,20 @@ async function parsePDF(file) {
         updateProgress(20, 'Loading PDF...');
 
         const pdf = await pdfjsLib.getDocument({ data: arrayBuffer }).promise;
-        let fullText = "";
         const numPages = pdf.numPages;
+        pdfPages = []; // Reset pages array
 
         // Extract text from all pages
         for (let pageNum = 1; pageNum <= numPages; pageNum++) {
           const page = await pdf.getPage(pageNum);
           const textContent = await page.getTextContent();
           const pageText = textContent.items.map(item => item.str).join(' ');
-          fullText += pageText + '\n\n';
+
+          // Store each page separately
+          pdfPages.push({
+            number: pageNum,
+            text: pageText.trim()
+          });
 
           // Update progress
           const progress = 20 + (pageNum / numPages) * 70;
@@ -244,7 +196,8 @@ async function parsePDF(file) {
         updateProgress(100, 'Complete!');
         setTimeout(() => {
           uploadZone.classList.remove("uploading");
-          displayBookContent(fullText, file.name);
+          // Show format selection modal
+          showFormatSelectionModal();
         }, 500);
       } catch (error) {
         console.error('Error parsing PDF:', error);
@@ -263,6 +216,211 @@ async function parsePDF(file) {
     console.error('Error initializing PDF parser:', error);
     uploadZone.classList.remove("uploading");
     showError('PDF support not available', 'PDF.js library failed to load. Please refresh the page.');
+  }
+}
+
+/**
+ * Show format selection modal
+ */
+function showFormatSelectionModal() {
+  const modal = document.getElementById('format-modal');
+  modal.style.display = 'flex';
+
+  // Add event listeners to format buttons
+  const formatButtons = modal.querySelectorAll('.format-option');
+  formatButtons.forEach(button => {
+    button.onclick = () => {
+      const format = button.getAttribute('data-format');
+      selectFormat(format);
+    };
+  });
+
+  // Add fade-in animation
+  setTimeout(() => {
+    modal.style.opacity = '1';
+  }, 10);
+}
+
+/**
+ * Handle format selection
+ */
+function selectFormat(format) {
+  selectedFormat = format;
+  const modal = document.getElementById('format-modal');
+
+  // Hide modal with animation
+  modal.style.opacity = '0';
+  setTimeout(() => {
+    modal.style.display = 'none';
+    // Display first page with selected format
+    currentPage = 0;
+    displayCurrentPage();
+    createPageNavigation();
+    showSuccessNotification(`✓ ${currentFileName} loaded with ${getFormatName(format)} format!`);
+  }, 300);
+}
+
+/**
+ * Get format display name
+ */
+function getFormatName(format) {
+  const names = {
+    'standard': 'Standard',
+    'dyslexic': 'Dyslexic-Friendly',
+    'large': 'Large Print',
+    'contrast': 'High Contrast'
+  };
+  return names[format] || 'Standard';
+}
+
+/**
+ * Display the current page with selected format
+ */
+function displayCurrentPage() {
+  if (pdfPages.length === 0) return;
+
+  const bookDisplay = document.getElementById("bookDisplay");
+  const pageData = pdfPages[currentPage];
+
+  // Apply format to text
+  const formattedText = applyTextFormat(pageData.text, selectedFormat);
+
+  // Display with fade effect
+  bookDisplay.style.opacity = '0';
+  bookDisplay.innerHTML = formattedText;
+  bookDisplay.className = `format-${selectedFormat}`;
+
+  setTimeout(() => {
+    bookDisplay.style.transition = 'opacity 0.3s ease';
+    bookDisplay.style.opacity = '1';
+  }, 50);
+
+  // Update page navigation
+  updatePageNavigation();
+}
+
+/**
+ * Apply text formatting based on selected format
+ */
+function applyTextFormat(text, format) {
+  let formattedText = text;
+
+  switch (format) {
+    case 'standard':
+      formattedText = `<div class="text-standard">${text}</div>`;
+      break;
+    case 'dyslexic':
+      formattedText = `<div class="text-dyslexic">${text}</div>`;
+      break;
+    case 'large':
+      formattedText = `<div class="text-large">${text}</div>`;
+      break;
+    case 'contrast':
+      formattedText = `<div class="text-contrast">${text}</div>`;
+      break;
+  }
+
+  return formattedText;
+}
+
+/**
+ * Create page navigation controls
+ */
+function createPageNavigation() {
+  const pageNav = document.getElementById('page-navigation');
+
+  pageNav.innerHTML = `
+    <div class="page-nav-container">
+      <button id="prev-page" class="page-nav-btn" title="Previous Page">
+        <span>◀</span> Previous
+      </button>
+      <div class="page-info">
+        <span class="page-current">Page <input type="number" id="page-jump" value="${currentPage + 1}" min="1" max="${pdfPages.length}"> of ${pdfPages.length}</span>
+      </div>
+      <button id="next-page" class="page-nav-btn" title="Next Page">
+        Next <span>▶</span>
+      </button>
+    </div>
+  `;
+
+  pageNav.style.display = 'flex';
+
+  // Add event listeners
+  const prevBtn = document.getElementById('prev-page');
+  const nextBtn = document.getElementById('next-page');
+  const pageJumpInput = document.getElementById('page-jump');
+
+  if (prevBtn) {
+    prevBtn.onclick = () => {
+      if (!prevBtn.classList.contains('disabled')) navigatePage(-1);
+    };
+  }
+
+  if (nextBtn) {
+    nextBtn.onclick = () => {
+      if (!nextBtn.classList.contains('disabled')) navigatePage(1);
+    };
+  }
+
+  if (pageJumpInput) {
+    pageJumpInput.onchange = (e) => jumpToPage(parseInt(e.target.value) - 1);
+  }
+
+  updatePageNavigation();
+}
+
+/**
+ * Navigate to previous or next page
+ */
+function navigatePage(direction) {
+  const newPage = currentPage + direction;
+
+  if (newPage >= 0 && newPage < pdfPages.length) {
+    currentPage = newPage;
+    displayCurrentPage();
+  }
+}
+
+/**
+ * Jump to specific page
+ */
+function jumpToPage(pageIndex) {
+  if (pageIndex >= 0 && pageIndex < pdfPages.length) {
+    currentPage = pageIndex;
+    displayCurrentPage();
+  }
+}
+
+/**
+ * Update page navigation button states
+ */
+function updatePageNavigation() {
+  const prevBtn = document.getElementById('prev-page');
+  const nextBtn = document.getElementById('next-page');
+  const pageJump = document.getElementById('page-jump');
+
+  if (prevBtn) {
+    if (currentPage === 0) {
+      prevBtn.classList.add('disabled');
+      prevBtn.setAttribute('aria-disabled', 'true');
+    } else {
+      prevBtn.classList.remove('disabled');
+      prevBtn.setAttribute('aria-disabled', 'false');
+    }
+  }
+
+  if (nextBtn) {
+    if (currentPage === pdfPages.length - 1) {
+      nextBtn.classList.add('disabled');
+      nextBtn.setAttribute('aria-disabled', 'true');
+    } else {
+      nextBtn.classList.remove('disabled');
+      nextBtn.setAttribute('aria-disabled', 'false');
+    }
+  }
+
+  if (pageJump) {
+    pageJump.value = currentPage + 1;
   }
 }
 

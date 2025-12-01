@@ -22,6 +22,7 @@
   <link rel="stylesheet" href="css/styles.css" />
   <link rel="stylesheet" href="css/dark-mode.css" />
   <link rel="stylesheet" href="css/games.css" />
+  <link rel="stylesheet" href="css/pdf-enhancements.css" />
 </head>
 
 <body>
@@ -44,6 +45,8 @@
         <input type="file" id="bookUpload" accept=".pdf,.epub,.txt" aria-label="Upload Book" hidden />
       </div>
       <div id="bookDisplay" tabindex="0" aria-label="Book Content"></div>
+      <!-- Page Navigation -->
+      <div id="page-navigation" style="display: none;"></div>
     </section>
 
     <!-- Customization Options -->
@@ -119,6 +122,38 @@
       <p>&copy; 2024 Dyslexia Support App. All Rights Reserved.</p>
     </footer>
   </main>
+
+  <!-- Format Selection Modal -->
+  <div id="format-modal" class="modal-overlay" style="display: none;">
+    <div class="modal-content">
+      <h2>📝 Choose Text Format</h2>
+      <p class="modal-description">Select how you'd like to view your PDF content:</p>
+      <div class="format-options">
+        <button class="format-option" data-format="standard">
+          <span class="format-icon">📄</span>
+          <span class="format-title">Standard</span>
+          <span class="format-desc">Original text formatting</span>
+        </button>
+        <button class="format-option" data-format="dyslexic">
+          <span class="format-icon">🔤</span>
+          <span class="format-title">Dyslexic-Friendly</span>
+          <span class="format-desc">OpenDyslexic font with enhanced spacing</span>
+        </button>
+        <button class="format-option" data-format="large">
+          <span class="format-icon">🔍</span>
+          <span class="format-title">Large Print</span>
+          <span class="format-desc">Larger text for easier reading</span>
+        </button>
+        <button class="format-option" data-format="contrast">
+          <span class="format-icon">⚫</span>
+          <span class="format-title">High Contrast</span>
+          <span class="format-desc">Enhanced visibility with high contrast</span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+
 
   <!-- External Libraries -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>

@@ -11,8 +11,12 @@ document.addEventListener("DOMContentLoaded", () => {
   const saveProfileButton = document.getElementById("saveProfileButton");
   const profiles = JSON.parse(localStorage.getItem("userProfiles")) || {};
 
-  saveProfileButton.addEventListener("click", saveProfile);
-  profileSelect.addEventListener("change", loadProfile);
+  if (saveProfileButton) {
+    saveProfileButton.addEventListener("click", saveProfile);
+  }
+  if (profileSelect) {
+    profileSelect.addEventListener("change", loadProfile);
+  }
 
   function saveProfile() {
     const profileName = profileSelect.value;

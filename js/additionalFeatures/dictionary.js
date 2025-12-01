@@ -11,13 +11,15 @@ document.addEventListener("DOMContentLoaded", () => {
   const dictionaryInput = document.getElementById("dictionaryInput");
   const definitionDisplay = document.getElementById("definitionDisplay");
 
-  dictionaryForm.addEventListener("submit", (e) => {
-    e.preventDefault();
-    const word = dictionaryInput.value.trim();
-    if (word) {
-      fetchDefinition(word);
-    }
-  });
+  if (dictionaryForm) {
+    dictionaryForm.addEventListener("submit", (e) => {
+      e.preventDefault();
+      const word = dictionaryInput.value.trim();
+      if (word) {
+        fetchDefinition(word);
+      }
+    });
+  }
 
   function fetchDefinition(word) {
     const apiUrl = `https://api.dictionaryapi.dev/api/v2/entries/en/${word}`;

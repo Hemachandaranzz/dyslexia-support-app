@@ -15,24 +15,30 @@ document.addEventListener("DOMContentLoaded", () => {
   let fontSize = 16;
   let isHighContrast = false;
 
-  increaseFontSizeButton.addEventListener("click", () => {
-    fontSize += 2;
-    updateFontSize();
-  });
+  if (increaseFontSizeButton) {
+    increaseFontSizeButton.addEventListener("click", () => {
+      fontSize += 2;
+      updateFontSize();
+    });
+  }
 
-  decreaseFontSizeButton.addEventListener("click", () => {
-    fontSize -= 2;
-    updateFontSize();
-  });
+  if (decreaseFontSizeButton) {
+    decreaseFontSizeButton.addEventListener("click", () => {
+      fontSize -= 2;
+      updateFontSize();
+    });
+  }
 
-  contrastToggleButton.addEventListener("click", () => {
-    isHighContrast = !isHighContrast;
-    document.body.classList.toggle("high-contrast", isHighContrast);
-    localStorage.setItem(
-      "highContrast",
-      isHighContrast ? "enabled" : "disabled"
-    );
-  });
+  if (contrastToggleButton) {
+    contrastToggleButton.addEventListener("click", () => {
+      isHighContrast = !isHighContrast;
+      document.body.classList.toggle("high-contrast", isHighContrast);
+      localStorage.setItem(
+        "highContrast",
+        isHighContrast ? "enabled" : "disabled"
+      );
+    });
+  }
 
   function updateFontSize() {
     bookDisplay.style.fontSize = `${fontSize}px`;

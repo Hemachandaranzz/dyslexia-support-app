@@ -101,20 +101,45 @@ function showFontChangeNotification(fontName) {
 
 function applyFontColor() {
   const fontColor = document.getElementById("fontColor").value;
-  document.getElementById("bookDisplay").style.color = fontColor;
+  const bookDisplay = document.getElementById("bookDisplay");
+
+  bookDisplay.style.setProperty('color', fontColor, 'important');
+
+  // Force update on all children to override format-specific CSS
+  const allElements = bookDisplay.querySelectorAll('*');
+  allElements.forEach(el => {
+    el.style.setProperty('color', fontColor, 'important');
+  });
+
   savePreference("fontColor", fontColor);
 }
 
 function applyBackgroundColor() {
   const backgroundColor = document.getElementById("backgroundColor").value;
-  document.getElementById("bookDisplay").style.backgroundColor =
-    backgroundColor;
+  const bookDisplay = document.getElementById("bookDisplay");
+
+  bookDisplay.style.setProperty('background-color', backgroundColor, 'important');
+
+  // Some formats might have background on children
+  const allElements = bookDisplay.querySelectorAll('*');
+  allElements.forEach(el => {
+    el.style.backgroundColor = 'transparent'; // Reset child backgrounds
+  });
+
   savePreference("backgroundColor", backgroundColor);
 }
 
 function applyLineSpacing() {
   const lineSpacing = document.getElementById("lineSpacing").value;
-  document.getElementById("bookDisplay").style.lineHeight = lineSpacing;
+  const bookDisplay = document.getElementById("bookDisplay");
+
+  bookDisplay.style.setProperty('line-height', lineSpacing, 'important');
+
+  const allElements = bookDisplay.querySelectorAll('*');
+  allElements.forEach(el => {
+    el.style.setProperty('line-height', lineSpacing, 'important');
+  });
+
   savePreference("lineSpacing", lineSpacing);
 }
 
