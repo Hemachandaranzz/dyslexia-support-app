@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description"
+    content="A comprehensive dyslexia support app with reading assistance, text-to-speech, and interactive games" />
+  <title>Dyslexia Support App</title>
+
+  <!-- Google Fonts for Modern Typography -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Poppins:wght@400;500;600;700&family=Lexend:wght@300;400;500;600&display=swap"
+    rel="stylesheet">
+
+  <!-- Dyslexia-Friendly Fonts -->
+  <link href="https://fonts.cdnfonts.com/css/opendyslexic" rel="stylesheet">
+
+  <!-- Link to CSS Files -->
+  <link rel="stylesheet" href="css/styles.css" />
+  <link rel="stylesheet" href="css/dark-mode.css" />
+  <link rel="stylesheet" href="css/games.css" />
+</head>
+
+<body>
+  <!-- Header Section -->
+  <header>
+    <h1>📖 Dyslexia Support App</h1>
+    <button id="toggle-dark-mode" aria-label="Toggle Dark Mode">🌙</button>
+  </header>
+
+  <!-- Main Content -->
+  <main>
+    <!-- Book Upload Section with Drag & Drop -->
+    <section id="book-upload-section">
+      <h2>📚 Upload Your Book</h2>
+      <div id="upload-zone" class="upload-zone">
+        <div class="upload-icon">📁</div>
+        <h3>Drag & Drop Your Book Here</h3>
+        <p>or click to browse</p>
+        <p class="supported-formats">Supports PDF, EPUB, and TXT files</p>
+        <input type="file" id="bookUpload" accept=".pdf,.epub,.txt" aria-label="Upload Book" hidden />
+      </div>
+      <div id="bookDisplay" tabindex="0" aria-label="Book Content"></div>
+    </section>
+
+    <!-- Customization Options -->
+    <section id="customization-section">
+      <h2>🎨 Customize Your Reading Experience</h2>
+      <label for="fontStyle">Font Style:</label>
+      <select id="fontStyle" aria-label="Select Font Style">
+        <option value="OpenDyslexic">OpenDyslexic (Dyslexia-Friendly)</option>
+        <option value="Lexend">Lexend (Dyslexia-Friendly)</option>
+        <option value="Comic Sans MS">Comic Sans MS</option>
+        <option value="Arial">Arial</option>
+        <option value="Verdana">Verdana</option>
+        <option value="Tahoma">Tahoma</option>
+      </select>
+
+      <label for="fontColor">Font Color:</label>
+      <input type="color" id="fontColor" value="#000000" aria-label="Select Font Color" />
+
+      <label for="backgroundColor">Background Color:</label>
+      <input type="color" id="backgroundColor" value="#FFFFFF" aria-label="Select Background Color" />
+
+      <label for="lineSpacing">Line Spacing:</label>
+      <input type="range" id="lineSpacing" min="1" max="2.5" step="0.1" value="1.6" aria-label="Adjust Line Spacing" />
+
+      <label for="textMargin">Text Margin:</label>
+      <input type="range" id="textMargin" min="0" max="50" step="1" value="10" aria-label="Adjust Text Margin" />
+    </section>
+
+    <!-- Text-to-Speech Section -->
+    <section id="tts-section">
+      <h2>🔊 Text-to-Speech</h2>
+      <button id="startTTS">▶️ Start Reading</button>
+      <button id="stopTTS">⏸️ Stop Reading</button>
+      <label for="voiceSelect">Choose Voice:</label>
+      <select id="voiceSelect"></select>
+      <label for="rateSlider">Speech Rate:</label>
+      <input type="range" id="rateSlider" min="0.5" max="2" step="0.1" value="1" />
+    </section>
+
+    <!-- Games Section -->
+    <section id="games-section">
+      <h2>🎮 Memory & Problem-Solving Games</h2>
+      <button id="memoryMatchingGame">🧠 Play Memory Matching Game</button>
+      <button id="sequenceRecallGame">🔢 Play Sequence Recall Game</button>
+      <button id="puzzleSolverGame">🧩 Play Puzzle Solver Game</button>
+      <div id="game-container"></div>
+    </section>
+
+    <!-- Additional Features Section -->
+    <section id="additional-features-section">
+      <h2>✨ Additional Features</h2>
+      <button id="startSTT">🎤 Start Speech-to-Text</button>
+      <div id="speechOutput"></div>
+
+      <button id="highlightText">🖍️ Highlight Selected Text</button>
+
+      <form id="dictionary Form">
+        <input type="text" id="dictionaryInput" placeholder="Enter word to look up" />
+        <button type="submit">🔍 Look Up</button>
+      </form>
+      <div id="definitionDisplay"></div>
+
+      <div id="progress-tracker">
+        <p>📊 Reading Progress:</p>
+        <div id="progressBarContainer">
+          <div id="progressBar"></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+      <p>&copy; 2024 Dyslexia Support App. All Rights Reserved.</p>
+    </footer>
+  </main>
+
+  <!-- External Libraries -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/epub.js/0.3.93/epub.min.js"></script>
+
+  <!-- Link to JS Files -->
+  <script src="js/main.js"></script>
+  <script src="js/bookUpload.js"></script>
+  <script src="js/customization.js"></script>
+  <script src="js/textToSpeech.js"></script>
+  <script src="js/games/memoryMatching.js"></script>
+  <script src="js/games/sequenceRecall.js"></script>
+  <script src="js/games/puzzleSolver.js"></script>
+  <script src="js/additionalFeatures/speechToText.js"></script>
+  <script src="js/additionalFeatures/highlighting.js"></script>
+  <script src="js/additionalFeatures/dictionary.js"></script>
+  <script src="js/additionalFeatures/progressTracker.js"></script>
+  <script src="js/additionalFeatures/lineSpacing.js"></script>
+  <script src="js/additionalFeatures/darkMode.js"></script>
+  <script src="js/additionalFeatures/wordTracking.js"></script>
+  <script src="js/additionalFeatures/simplifiedLayout.js"></script>
+  <script src="js/additionalFeatures/userProfiles.js"></script>
+  <script src="js/additionalFeatures/accessibility.js"></script>
+  <script src="js/utilities.js"></script>
+</body>
+
+</html>

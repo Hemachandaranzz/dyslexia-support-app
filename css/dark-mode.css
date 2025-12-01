@@ -1,0 +1,192 @@
+/* Dark Mode Styles - Modern Premium Theme */
+
+body.dark-mode {
+  background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+  background-attachment: fixed;
+  color: #e0e0e0;
+  transition: all 0.3s ease;
+}
+
+/* Dark Mode - Glassmorphism */
+body.dark-mode header {
+  background: rgba(30, 30, 46, 0.7);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+body.dark-mode header h1 {
+  background: linear-gradient(135deg, #a78bfa 0%, #ec4899 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+body.dark-mode header button {
+  background: rgba(30, 30, 46, 0.8);
+  border-color: rgba(255, 255, 255, 0.2);
+  color: #fbbf24;
+}
+
+/* Dark Mode Sections */
+body.dark-mode section {
+  background: rgba(30, 30, 46, 0.7);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  box-shadow: 0 20px 25px rgba(0, 0, 0, 0.3);
+}
+
+body.dark-mode section:hover {
+  box-shadow: 0 20px 25px rgba(0, 0, 0, 0.4), 0 0 30px rgba(167, 139, 250, 0.3);
+}
+
+body.dark-mode section h2 {
+  background: linear-gradient(135deg, #a78bfa 0%, #ec4899 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  border-bottom-color: rgba(167, 139, 250, 0.2);
+}
+
+/* Dark Mode Form Elements */
+body.dark-mode label {
+  color: #d1d5db;
+}
+
+body.dark-mode input[type="file"],
+body.dark-mode input[type="color"],
+body.dark-mode input[type="range"],
+body.dark-mode select,
+body.dark-mode input[type="text"] {
+  background: rgba(30, 30, 46, 0.8);
+  border-color: rgba(255, 255, 255, 0.2);
+  color: #e0e0e0;
+}
+
+body.dark-mode input:focus,
+body.dark-mode select:focus {
+  border-color: #a78bfa;
+  box-shadow: 0 0 0 3px rgba(167, 139, 250, 0.2);
+}
+
+/* Dark Mode Buttons */
+body.dark-mode button {
+  background: linear-gradient(135deg, #a78bfa 0%, #ec4899 100%);
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+}
+
+body.dark-mode button:hover {
+  box-shadow: 0 10px 15px rgba(0, 0, 0, 0.4), 0 0 20px rgba(167, 139, 250, 0.5);
+}
+
+body.dark-mode button:disabled {
+  background: linear-gradient(135deg, #4b5563 0%, #374151 100%);
+}
+
+/* Dark Mode Book Display */
+body.dark-mode #bookDisplay {
+  background: rgba(30, 30, 46, 0.9);
+  border-color: rgba(255, 255, 255, 0.2);
+  color: #e0e0e0;
+  box-shadow: inset 0 2px 8px rgba(0, 0, 0, 0.3);
+}
+
+body.dark-mode #bookDisplay:hover {
+  border-color: #a78bfa;
+  box-shadow: inset 0 2px 12px rgba(167, 139, 250, 0.2);
+}
+
+/* Dark Mode Scrollbar */
+body.dark-mode #bookDisplay::-webkit-scrollbar-track {
+  background: rgba(75, 85, 99, 0.5);
+}
+
+body.dark-mode #bookDisplay::-webkit-scrollbar-thumb {
+  background: linear-gradient(135deg, #a78bfa 0%, #ec4899 100%);
+}
+
+/* Dark Mode Highlight */
+body.dark-mode .highlight {
+  background: linear-gradient(120deg, #fbbf24 0%, #f59e0b 100%);
+  color: #1a1a2e;
+  box-shadow: 0 2px 4px rgba(251, 191, 36, 0.3);
+}
+
+/* Dark Mode Game Container */
+body.dark-mode #game-container {
+  background: rgba(30, 30, 46, 0.5);
+}
+
+/* Dark Mode Progress Bar */
+body.dark-mode #progressBarContainer {
+  background: rgba(75, 85, 99, 0.6);
+}
+
+body.dark-mode #progressBar {
+  background: linear-gradient(135deg, #a78bfa 0%, #ec4899 100%);
+  box-shadow: 0 0 10px rgba(167, 139, 250, 0.6);
+}
+
+/* Dark Mode Footer */
+body.dark-mode footer {
+  background: rgba(30, 30, 46, 0.7);
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  color: #9ca3af;
+}
+
+/* Dark Mode Definition Display */
+body.dark-mode #definitionDisplay,
+body.dark-mode #speechOutput {
+  background: rgba(30, 30, 46, 0.9);
+  border-color: rgba(255, 255, 255, 0.2);
+  color: #e0e0e0;
+}
+
+/* Dark Mode Range Slider */
+body.dark-mode input[type="range"] {
+  background: linear-gradient(to right, #a78bfa, #ec4899);
+}
+
+body.dark-mode input[type="range"]::-webkit-slider-thumb {
+  border-color: #a78bfa;
+  box-shadow: 0 2px 8px rgba(167, 139, 250, 0.4);
+}
+
+body.dark-mode input[type="range"]::-webkit-slider-thumb:hover {
+  box-shadow: 0 4px 12px rgba(167, 139, 250, 0.6);
+}
+
+body.dark-mode input[type="range"]::-moz-range-thumb {
+  border-color: #a78bfa;
+  box-shadow: 0 2px 8px rgba(167, 139, 250, 0.4);
+}
+
+/* Dark Mode Memory Game */
+body.dark-mode .card .front-face {
+  background: rgba(30, 30, 46, 0.9);
+}
+
+body.dark-mode .card .back-face {
+  background: linear-gradient(135deg, #a78bfa 0%, #ec4899 100%);
+}
+
+/* Dark Mode Game Stats */
+body.dark-mode #game-stats p,
+body.dark-mode #puzzle-stats p {
+  color: #d1d5db;
+}
+
+/* Smooth Transitions for Dark Mode */
+body.dark-mode,
+body.dark-mode header,
+body.dark-mode section,
+body.dark-mode button,
+body.dark-mode input,
+body.dark-mode select,
+body.dark-mode #bookDisplay,
+body.dark-mode #game-container,
+body.dark-mode footer {
+  transition: all 0.3s ease;
+}
+
+/* Dark Mode Focus Styles */
+body.dark-mode *:focus {
+  outline-color: rgba(167, 139, 250, 0.5);
+}

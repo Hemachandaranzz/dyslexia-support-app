@@ -1,0 +1,352 @@
+/* Games CSS - Modern Enhanced Styling */
+
+/* Memory Matching Game */
+#memory-game {
+  width: 100%;
+  max-width: 700px;
+  margin: 0 auto;
+  text-align: center;
+  animation: fadeIn 0.5s ease-out;
+}
+
+#memory-game h3 {
+  font-family: 'Poppins', sans-serif;
+  font-size: 1.75rem;
+  font-weight: 600;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  margin-bottom: 1.5rem;
+}
+
+#game-stats {
+  display: flex;
+  justify-content: center;
+  gap: 3rem;
+  margin-bottom: 1.5rem;
+  flex-wrap: wrap;
+}
+
+#game-stats p {
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: #2d3748;
+  background: rgba(255, 255, 255, 0.8);
+  padding: 0.75rem 1.5rem;
+  border-radius: 12px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.07);
+  border: 2px solid rgba(102, 126, 234, 0.2);
+}
+
+#game-stats span {
+  color: #667eea;
+  font-size: 1.3rem;
+  font-weight: 700;
+}
+
+/* Memory Grid */
+#memory-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1rem;
+  margin: 2rem 0;
+  padding: 1rem;
+}
+
+/* Card Styling with 3D Flip */
+.card {
+  position: relative;
+  width: 100%;
+  padding-top: 100%;
+  /* 1:1 Aspect Ratio */
+  cursor: pointer;
+  perspective: 1000px;
+  transition: transform 0.2s ease;
+}
+
+.card:hover {
+  transform: scale(1.05);
+}
+
+.card-inner {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  transform-style: preserve-3d;
+  transition: transform 0.6s cubic-bezier(0.4, 0.0, 0.2, 1);
+}
+
+.card.flip .card-inner {
+  transform: rotateY(180deg);
+}
+
+.card .front-face,
+.card .back-face {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  backface-visibility: hidden;
+  border-radius: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  transition: box-shadow 0.3s ease;
+}
+
+.card .front-face {
+  background: white;
+  transform: rotateY(180deg);
+  border: 3px solid rgba(102, 126, 234, 0.3);
+}
+
+.card .front-face svg,
+.card .front-face img {
+  max-width: 70%;
+  max-height: 70%;
+}
+
+.card .back-face {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  box-shadow: 0 6px 12px rgba(102, 126, 234, 0.3);
+}
+
+.card .back-face::before {
+  content: '?';
+  font-size: 3rem;
+  color: white;
+  font-weight: 700;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.card.matched {
+  pointer-events: none;
+  opacity: 0.6;
+  animation: matchPulse 0.5s ease-out;
+}
+
+@keyframes matchPulse {
+
+  0%,
+  100% {
+    transform: scale(1);
+  }
+
+  50% {
+    transform: scale(1.1);
+  }
+}
+
+/* Restart Button */
+#restart-game {
+  margin-top: 1.5rem;
+  background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+  font-size: 1.1rem;
+  padding: 1rem 2rem;
+}
+
+#restart-game:hover {
+  box-shadow: 0 10px 15px rgba(245, 87, 108, 0.3), 0 0 20px rgba(245, 87, 108, 0.4);
+}
+
+/* Sequence Recall Game */
+#sequence-game {
+  width: 100%;
+  max-width: 600px;
+  margin: 0 auto;
+  text-align: center;
+}
+
+#sequence-display {
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+  margin: 2rem 0;
+  min-height: 100px;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.sequence-item {
+  width: 60px;
+  height: 60px;
+  border-radius: 12px;
+  background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: white;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  animation: sequenceAppear 0.3s ease-out;
+}
+
+@keyframes sequenceAppear {
+  from {
+    opacity: 0;
+    transform: scale(0.5);
+  }
+
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+/* Puzzle Solver Game */
+#puzzle-game {
+  width: 100%;
+  max-width: 700px;
+  margin: 0 auto;
+  text-align: center;
+}
+
+#puzzle-game h3 {
+  font-family: 'Poppins', sans-serif;
+  font-size: 1.75rem;
+  font-weight: 600;
+  background: linear-gradient(135deg, #fa709a 0%, #fee140 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  margin-bottom: 1.5rem;
+}
+
+#puzzle-canvas {
+  border: 3px solid rgba(102, 126, 234, 0.3);
+  border-radius: 16px;
+  margin: 2rem auto;
+  box-shadow: 0 10px 15px rgba(0, 0, 0, 0.1);
+  background: white;
+  cursor: pointer;
+  transition: transform 0.2s ease;
+}
+
+#puzzle-canvas:hover {
+  transform: scale(1.02);
+  box-shadow: 0 12px 20px rgba(0, 0, 0, 0.15);
+}
+
+#puzzle-controls {
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+  margin-top: 1.5rem;
+  flex-wrap: wrap;
+}
+
+#puzzle-stats {
+  display: flex;
+  justify-content: center;
+  gap: 2rem;
+  margin-top: 1rem;
+  flex-wrap: wrap;
+}
+
+#puzzle-stats p {
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: #2d3748;
+  background: rgba(255, 255, 255, 0.8);
+  padding: 0.75rem 1.5rem;
+  border-radius: 12px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.07);
+}
+
+/* Victory Animation */
+.victory-message {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  padding: 3rem 4rem;
+  border-radius: 24px;
+  font-size: 2rem;
+  font-weight: 700;
+  box-shadow: 0 20px 30px rgba(0, 0, 0, 0.3);
+  z-index: 10000;
+  animation: victoryPop 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+}
+
+@keyframes victoryPop {
+  0% {
+    transform: translate(-50%, -50%) scale(0);
+    opacity: 0;
+  }
+
+  100% {
+    transform: translate(-50%, -50%) scale(1);
+    opacity: 1;
+  }
+}
+
+/* Confetti (simple CSS version) */
+.confetti {
+  position: fixed;
+  width: 10px;
+  height: 10px;
+  background: #f093fb;
+  top: -10px;
+  border-radius: 50%;
+  animation: confettiFall 3s linear forwards;
+  pointer-events: none;
+}
+
+@keyframes confettiFall {
+  to {
+    transform: translateY(100vh) rotate(360deg);
+    opacity: 0;
+  }
+}
+
+/* Responsive Design for Games */
+@media (max-width: 768px) {
+  #memory-grid {
+    grid-template-columns: repeat(3, 1fr);
+    gap: 0.75rem;
+    padding: 0.5rem;
+  }
+
+  #game-stats {
+    gap: 1.5rem;
+  }
+
+  #game-stats p {
+    padding: 0.5rem 1rem;
+    font-size: 1rem;
+  }
+
+  .card .back-face::before {
+    font-size: 2rem;
+  }
+
+  #puzzle-canvas {
+    max-width: 100%;
+    height: auto;
+  }
+
+  #puzzle-controls {
+    flex-direction: column;
+  }
+
+  #puzzle-controls button {
+    width: 100%;
+  }
+
+  .victory-message {
+    padding: 2rem 3rem;
+    font-size: 1.5rem;
+  }
+}
+
+@media (max-width: 480px) {
+  #memory-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}

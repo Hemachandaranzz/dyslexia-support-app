@@ -1,0 +1,25 @@
+{
+  "name": "dyslexia-support-app",
+  "version": "1.0.0",
+  "description": "A comprehensive dyslexia support web application with reading assistance, text-to-speech, and interactive games",
+  "main": "index.html",
+  "scripts": {
+    "start": "python -m http.server 8000",
+    "dev": "python -m http.server 8000"
+  },
+  "keywords": [
+    "dyslexia",
+    "accessibility",
+    "education",
+    "reading-support",
+    "text-to-speech",
+    "games",
+    "memory-training"
+  ],
+  "author": "Your Name",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/YOUR_USERNAME/dyslexia-support-app.git"
+  }
+}
